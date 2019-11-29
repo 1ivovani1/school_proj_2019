@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <style>
+    .file-upload .btn-tertiary{color:#555;padding:0;line-height:40px;width:300px;margin:auto;display:block;border:2px solid #555}
+    .file-upload .btn-tertiary:hover,.file-upload .btn-tertiary:focus{color:#888;border-color:#888}
+    .file-upload .input-file{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
+    .file-upload .input-file + .js-labelFile{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 10px;cursor:pointer}
+    .file-upload .input-file + .js-labelFile .icon:before{content:"\f093"}
+    .file-upload .input-file + .js-labelFile.has-file .icon:before{content:"\f00c";color:#5AAC7B}
+  </style>
+
+  <title>Регистрация</title>
+</head>
+
+<body class="text-center" style="height: 100%;display: -webkit-flex;display: -ms-flex;display: flex;-ms-align-items: center;align-items: center;justify-content: center;-webkit-flex-direction: column;-ms-flex-direction: column;flex-direction: column;">
+  <div class="container">
+  <div class="row">
+    <div class="col-12">
+      <center>
+      <center><a href="/login" style="text-decoration: none;"><img class="img-fluid" src="static/img/logo.png" alt="" height="100px" width="100px"></a></center>
+
+        {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Ошибка! </strong>{{ message }}
+                </div>
+            {% endfor %}
+      <form method='post' enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal">Пожалуйста,зарегистрируйтесь!</h1>
+        <div class="form-group">
+          <input style="width:40%" type="text" name='login'  id="inputEmail" class="form-control" placeholder="Придумайте логин" required="" autofocus="">
+        </div>
+
+        <div class="form-group">
+          <input style="width:40%" type="text" name='first_name'  id="inputEmail" class="form-control" placeholder="Ваше имя" required="" autofocus="">
+        </div>
+
+        <div class="form-group">
+          <input style="width:40%" type="text" name='last_name'  id="inputEmail" class="form-control" placeholder="Ваша фамилия" required="" autofocus="">
+        </div>
+
+    <div class="form-group">
+      <input style="width:40%" type="email" name='email' id="inputEmail" class="form-control" placeholder="e-mail" required="">
+    </div>
+
+
+    <div class="file-upload">
+    <div class="form-group">
+      <input type="file" name="avatar" id="file" class="input-file">
+      <label for="file" class="btn btn-tertiary js-labelFile">
+        <i class="icon fa fa-check"></i>
+        <span class="js-fileName">Загрузить аватарку</span>
+      </label>
+    </div>
+  </div>
+
+
+
+    <div class="form-group">
+      <input style="width:40%" type="password" name='password' id="pass" class="form-control" placeholder="Пароль" required="">
+    </div>
+
+    <div class="form-group">
+      <input style="width:40%" type="password" class="form-control" id='pass_reap' placeholder="Повторите пароль" required="">
+        <center>
+          <small class="d-none err-mess">Пароли не совпадают</small>
+          <small>Минимальная длина пароля - 6</small>
+        </center>
+    </div>
+
+        <button class="btn  btn-primary d-none" id='create'type="submit">Создать аккаунт</button>
+      </form>
+      </center>
+    </div>
+
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="static/valid-password.js"></script>
+  <script type="text/javascript">
+          (function() {
+
+      'use strict';
+
+      $('.input-file').each(function() {
+      var $input = $(this),
+      $label = $input.next('.js-labelFile'),
+      labelVal = $label.html();
+
+      $input.on('change', function(element) {
+      var fileName = '';
+      if (element.target.value) fileName = element.target.value.split('\\').pop();
+      fileName ? $label.addClass('has-file').find('.js-fileName').html(fileName) : $label.removeClass('has-file').html(labelVal);
+      });
+      });
+
+      })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+{% extends 'base.html'%}
+  {%block title%}Моя страница{%endblock%}
+  {%block style%}
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        .form-group{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        h3{
+            text-align: left;
+            margin: 5% 0;
+        }
+        form{
+            border-radius: 25px;
+            border:3px dashed burlywood;
+            padding: 2% 10%;
+        }
+        form label{
+            align-self: flex-start;
+        }
+        img{
+            height:100px;
+        }
+        #tree_pic{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+        }
+        .row{
+            font-family: 'buttons_font';
+        }
+        .plus_str_button{
+            height: 100%;
+            background-color:limegreen;
+            opacity: 0.8;
+            color:white;
+            border-radius:35px;
+            text-align: center;
+            text-shadow: 0 0 5px black;
+            padding: 0 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: 0.4s;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .plus_str_button:hover{
+            transform: scale(1.1);
+            cursor:pointer;
+        }
+        
+        @media screen and (max-width: 991px){
+            .lol{
+                margin-top: 3%;
+            }
+        }
+    </style>  
+  {%endblock%}
+
+{%block content%}
+    <div class="row">
+        <div class="col-8 col-lg-10 col-xl-10">
+                <h3>Начнем работу,связанную с созданием нашего проекта</h3>
+        </div>
+        <div class="col-4 col-lg-2 col-xl-2" id='tree_pic'>
+            <img src="static/img/tree.svg" alt="" >
+        </div>    
+    </div>
+    <form method = 'post'>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="project_name">Введите название вашего проекта!</label>
+            <input style="width:100%" type="text" id="project_name" name='name' class="form-control" placeholder="Название вашего проекта" required="" autofocus="">
+        </div>
+        <div class="form-group">
+                <label for="project_description">Заполните описание вашего проекта!</label>
+                <textarea style="width:100%" type="text" id="project_description" name='description' class="form-control" placeholder="Описание вашего проекта" required="" autofocus=""></textarea>
+        </div>
+        <div class="row">
+            
+            <div class="col-lg-4 col-xl-4 col-md-12 col-sm-12 lol">
+                <span class="plus_str_button">Мой проект об</span>
+            </div>
+            
+            <div class="col-lg-4 col-xl-4 col-md-12 col-sm-12 lol">
+                <span class="plus_str_button">Работа над ним заняла</span>
+            </div>
+            
+            <div class="col-lg-4 col-xl-4 col-md-12 col-sm-12 lol">
+                <span class="plus_str_button">В команде было</span>
+            </div>
+        
+        </div>
+    </form>
+    <script src="static/add_text.js"></script>
+
+{%endblock%}
