@@ -3,7 +3,14 @@
 
 {%block content%}
 
+{% for message in messages %}
+              <center>
+                <div class="alert alert-success" style="width: 40%;" role="alert">
+                    <strong>Поздравляю!</strong>{{ message }}
+                </div>
+              </center>
+{% endfor %}
 <center><h1>Тут у нас главная страница</h1></center>
-<center><a class="btn btn-primary" href="/add_proj">Добавить свой проект</a></center>
+<center><a class="btn btn-primary" href="/student/add_proj">Добавить свой проект</a></center>
 
  {% endblock %}

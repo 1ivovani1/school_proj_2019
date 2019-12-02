@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="../static/css/long-input.css">
 
+  <link rel="stylesheet" href="../static/css/long-input.css">
   <title>Вход</title>
 </head>
 <body class="text-center" style="height: 100%;display: -webkit-flex;display: -ms-flex;display: flex;-ms-align-items: center;align-items: center;justify-content: center;-webkit-flex-direction: column;-ms-flex-direction: column;flex-direction: column;">
@@ -15,25 +15,19 @@
   <div class="row">
     <div class="col-12">
       <center>
-      <center style="margin-bottom: 1%;"><img class="img-fluid" src="../static/img/logo.svg" alt="" height="200px" width="200px" style="margin-bottom: 5%;"></center>
+      <center style="margin-bottom: 1%;"><img class="img-fluid" src="../static/img/logo.svg" alt="" height="200px" width="200px"></center>
       {% for message in messages %}
       <div class="alert alert-danger" style="width: 40%;" role="alert">
           <strong>Ошибка! </strong>{{ message }}
       </div>
   {% endfor %}
       <form method='post'>
+        <h5>Мы отправили код подтверждения на <span style="color:#2C7BFF">{{email}}</span><br>Введите его в поле ниже</h5>
         {% csrf_token %}
         <div class="form-group">
-          <input style="width:40%" type="text" name='login'  id="inputEmail" class="form-control" placeholder="Логин" required="" autofocus="">
+          <input style="width:40%" type="text" name='email_code' class="form-control" placeholder="Код из email" required="" autofocus="">
         </div>
-        <div class="form-group">
-          <input style="width:40%" type="password" name='password' id="inputPassword" class="form-control" placeholder="Пароль" required="">
-          <!-- <small><a href="/student/password-reset" >Забыли пароль?</a></small> -->
-        </div>
-
-
-             <button class="btn  btn-primary " type="submit">Войти</button>
-             <a class="btn  btn-success " href="/student/register" style="color:white ;text-decoration: none;">Регистрация</a>
+             <button class="btn  btn-primary btn-block" style="width: 40%;" type="submit">Отправить</button>
       </form>
       </center>
       </div>
