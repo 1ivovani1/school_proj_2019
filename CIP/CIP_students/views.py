@@ -29,7 +29,8 @@ def logout_page(request):
 
 
 newUserInfo = {
-    'leftData':False
+    'leftData':False,
+    'regProccess':False
 }
 
 def register(request):
@@ -45,30 +46,44 @@ def register(request):
             messages.add_message(request, messages.ERROR, 'Пользователь уже существует!')
             return redirect('/student/register')
 
+        elif CustomUser.objects.filter(email = request.POST.get('email')).exists():
+            messages.add_message(request, messages.ERROR, 'Данный email уже занят попробуйте другой!')
+            return redirect('/student/register')
         else:
-             newUserInfo['username'] = request.POST.get('login')
-             newUserInfo['first_name'] = request.POST.get('first_name')
-             newUserInfo['last_name'] = request.POST.get('last_name')
-             newUserInfo['email'] = request.POST.get('email')
-             newUserInfo['password'] = request.POST.get('password')
-             if 'avatar' in request.FILES:
-                newUserInfo['avatar'] = request.FILES['avatar']
-             else:
-                 newUserInfo['avatar'] = 0
-             chars = '+-/abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-             code = ''
-             length = random.randint(5,8)
-             for i in range(length):
+            newUserInfo['username'] = request.POST.get('login')
+            newUserInfo['email'] = request.POST.get('email')
+            newUserInfo['first_name'] = request.POST.get('first_name')
+
+            newUserInfo['regProccess'] = True
+
+            user = CustomUser()
+            user.username = request.POST.get('login')
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.set_password(request.POST.get('password'))
+        
+            if 'avatar' in request.FILES:
+                user.avatar = request.FILES['avatar']
+
+            user.save()
+
+            login(request,user)
+
+            
+
+            chars = '+-/abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            code = ''
+            length = random.randint(5,8)
+            for i in range(length):
                 code += random.choice(chars)
-             
-             newUserInfo['code'] = code
-             newUserInfo['leftData'] = True
-             return redirect('/student/verification')
-                
+            
+            newUserInfo['code'] = code
+            newUserInfo['leftData'] = True
+            return redirect('/student/verification')
 
 def register_code_enter(request):
     global newUserInfo
-    print(newUserInfo)
     if request.method == 'GET' and newUserInfo.get('leftData') == True:
         
         name = newUserInfo.get('first_name')
@@ -88,26 +103,21 @@ def register_code_enter(request):
         
         if email_code == newUserInfo.get('code'):
             messages.add_message(request,messages.ERROR,'Вы успешно зарегистрировались!')
-                        
-            user = CustomUser()
-            user.username = newUserInfo.get('username')
-            user.first_name = newUserInfo.get('first_name')
-            user.last_name = newUserInfo.get('last_name')
-            user.email = newUserInfo.get('email')
-            user.set_password(newUserInfo.get('password'))
-            if newUserInfo.get('avatar') != 0:
-                user.avatar = newUserInfo.get('avatar')
-            user.save()
-
-            login(request,user)
+        
 
             newUserInfo = {
-                'leftData':False
+                'leftData':False,
+                'regProccess':False
             }
 
-            return redirect('/student/page')
+            return redirect('/student/')
         else:
             messages.add_message(request,messages.ERROR,'Код неверен!')
+            CustomUser.objects.filter(username = newUserInfo['username']).delete()
+            newUserInfo = {
+                'leftData':False,
+                'regProccess':False
+            }
             return redirect('/student/register')
 
 def login_page(request):
@@ -134,12 +144,27 @@ def mainPage(request):
     if not request.user.is_authenticated:
         return redirect('/student/login')
 
+    if newUserInfo['regProccess']:
+        return redirect('/student/verification')
+
     return render(request,"main.html")
 
 def userPage(request):
+    if not request.user.is_authenticated:
+        return redirect('/student/login')
+    
+    if newUserInfo['regProccess']:
+        return redirect('/student/verification')
+
     if request.method == 'GET':
         id = request.user.id
         user = CustomUser.objects.get(pk=id)
         return render(request,'page.html',{'user':user})
 def add_proj(request):
+    if not request.user.is_authenticated:
+        return redirect('/student/login')
+
+    if newUserInfo['regProccess']:
+        return redirect('/student/verification')
+
     return render(request,'add_project_form.html')
