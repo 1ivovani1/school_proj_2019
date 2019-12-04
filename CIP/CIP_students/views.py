@@ -23,6 +23,10 @@ class LoginValidation(forms.Form):
     login = forms.CharField(max_length=30)
     password = forms.CharField(min_length=6)
 
+
+def choise(request):
+    return render(request,'choise.html')
+
 def logout_page(request):
     logout(request)
     return redirect('/student/login')
