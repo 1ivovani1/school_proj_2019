@@ -7,11 +7,12 @@ from django.contrib.auth.models import Group
 from django import forms
 
 from django.core.mail import send_mail
-import random
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core import mail
 from django.template.defaulttags import register
+
+import random,datetime
 
 
 class RegisterValidation(forms.Form):
@@ -66,15 +67,14 @@ def register(request):
             user.last_name = request.POST.get('last_name')
             user.email = request.POST.get('email')
             user.set_password(request.POST.get('password'))
-        
+            user.status = 'student'
+
             if 'avatar' in request.FILES:
                 user.avatar = request.FILES['avatar']
 
             user.save()
 
             login(request,user)
-
-            
 
             chars = '+-/abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
             code = ''
@@ -151,7 +151,9 @@ def mainPage(request):
     if newUserInfo['regProccess']:
         return redirect('/student/verification')
 
-    return render(request,"main.html")
+    users = CustomUser.objects.all()
+
+    return render(request,"main.html",{'users':users})
 
 def userPage(request):
     if not request.user.is_authenticated:
@@ -161,14 +163,33 @@ def userPage(request):
         return redirect('/student/verification')
 
     if request.method == 'GET':
-        id = request.user.id
+        id = request.GET.get('id')
         user = CustomUser.objects.get(pk=id)
-        return render(request,'page.html',{'user':user})
-def add_proj(request):
-    if not request.user.is_authenticated:
-        return redirect('/student/login')
 
-    if newUserInfo['regProccess']:
-        return redirect('/student/verification')
+        allNotes = Note.objects.filter(whom = user.username).all()
 
-    return render(request,'add_project_form.html')
+        return render(request,'page.html',{'user':user,'notes':allNotes,'length':len(allNotes)})
+    
+    if request.method == 'POST':
+        if 'delete_note' in request.POST:
+            page_id = request.GET.get('id')
+            note_id = request.POST.get('delete_note')
+
+            Note.objects.filter(id = note_id).first().delete()
+
+            return redirect(f'/student/page?id={page_id}')
+            
+        else:
+            id = request.GET.get('id')
+            whom = CustomUser.objects.get(pk=int(id))
+
+            newNote = Note()
+            newNote.date = datetime.datetime.now()
+            newNote.text = request.POST.get('note_text')
+            newNote.whom = whom.username
+            newNote.author = request.user
+
+            newNote.save()
+
+            return redirect(f'/student/page?id={id}')        
+

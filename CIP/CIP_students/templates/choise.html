@@ -14,7 +14,7 @@
             min-height: 100vh;
         }
         a{
-            padding: 20%;
+            padding: 10%;
             display: block;
             transition: 0.4s;
             display: flex;
@@ -30,21 +30,26 @@
         }
         a:hover{
             opacity: 0.7;
-            color: aquamarine;
+        }
+        .container{
+            margin-bottom:3%;    
         }
     </style>
 </head>
-<body>
+<body style="overflow-x: hidden;">
 
    <div class="container">
-       <center style="margin-bottom: 3%;"><nobr><img class="img-fluid" src="../static/img/logo.svg" alt="" height="100px" width="100px"><h1 style="margin-top: 3%;">Кто вы есть(только без обмана,пж)?</h1></nobr></center>
+       <center style="margin-bottom: 3%;"><img class="img-fluid mt-4" src="../static/img/logo.svg" alt="" height="100px" width="100px"></center>
        <div class="row">
            <a href="/teacher" style="text-decoration:none;background:url('../static/img/teacher.jpg') center no-repeat;background-size:cover;" class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" id="teacher">
                 <h1>Я учитель</h1>
            </a>
-           <a href="/student" style="text-decoration:none;background:url('../static/img/pupil.jpg') center no-repeat;background-size:cover;" class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+           <a href="/student" style="text-decoration:none;background:url('../static/img/pupil.jpg') center no-repeat;background-size:cover;" class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <h1>Я ученик</h1>
            </a>
+           <a href="/business" class="col-12" style="text-decoration:none;background:url('../static/img/business.jpeg') center no-repeat;background-size:cover;">
+            <h1>Я хочу проект!</h1>
+        </a>
        </div>
    </div> 
 

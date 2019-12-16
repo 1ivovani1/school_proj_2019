@@ -5,12 +5,18 @@
 
 {% for message in messages %}
               <center>
-                <div class="alert alert-success" style="width: 40%;" role="alert">
+                <div class="alert alert-success" role="alert">
                     <strong>Поздравляю!</strong>{{ message }}
                 </div>
               </center>
 {% endfor %}
 <center><h1>Тут у нас главная страница</h1></center>
 <center><a class="btn btn-primary" href="/student/add_proj">Добавить свой проект</a></center>
+
+      {% for user in users %}
+
+              <a href="/student/page?id={{user.id}}">{{user.username}}</a>
+
+      {% endfor %}
 
  {% endblock %}

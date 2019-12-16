@@ -3,17 +3,111 @@
 
 {%block content%}
 
+{% block style %}
+  <style>
+    i{
+     transition: 0.2s; 
+    }
+    i:hover{
+      color:#2C7BFF;
+    }
+  </style>
+{% endblock %}
 
-
-<div class="row mt-5">
+<div class="row pt-5 pb-5">
   <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12" style="display: flex;-ms-align-items: center;  align-items: center; justify-content: center; -webkit-flex-direction: column;-ms-flex-direction: column;flex-direction: column;">
-    <center><img src="{{user.avatar.url}}" class='img-fluid' style='height: 200px;width: 300px;' alt="картинка юзера"></center></div>
+    <center><img src="{{user.avatar.url}}" class='img-fluid' style="border-radius:15px;" alt="картинка юзера"></center></div>
   <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12">
     <h1>{{user.first_name}} {{user.last_name}}</h1>
     <ul class="list-group">
-      <li class="list-group-item">Тут будет какой-нибудь списочек с навыкамии и проектами</li>
+      <li class="list-group-item"><strong style="margin-right: 10px;">e-mail:</strong>{{user.email}}</li>
+      <li class="list-group-item"><strong style="margin-right: 10px;">Дата регистрации:</strong>{{user.date_joined.date}}</li>
+      
     </ul>
   </div>
 </div>
+
+<form method='POST'>
+  {% csrf_token %}
+<div class="row mb-3">
+  <div class="col-1" style="display:flex;align-items:center;justify-content:center;">
+    <img src="{{request.user.avatar.url}}" style="border-radius:25px;" id="avatar_requested" class="img-fluid" alt="">
+  </div>
+  
+  <div class="col-11" style="display:flex;align-items:center;justify-content:center;">
+      <div class="input-group">
+        
+          <input type="text" class="form-control" name="note_text" placeholder="Напишите что-нибудь..." aria-label="Recipient's username" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit" id="button-addon2">Отправить</button>
+          </div>
+        </div>
+  </div>
+</div>
+</form>
+
+<div class="row mb-5">
+  <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+      <h1>Проекты</h1>
+
+    <div class="card text-center">
+      <div class="card-header" >
+        <strong>Новый проект</strong>
+        
+        <i class="far fa-window-close" style="float:right;font-size:1.5em;cursor: pointer;"></i>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Заголовок проекта</h5>
+        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur fuga ipsa omnis assumenda est vitae eveniet sint, ipsum neque cum modi illo perferendis ipsam dolore debitis voluptatem commodi necessitatibus eum.Minus ex deserunt sit neque animi aliquam magnam assumenda praesentium. Omnis quas ex eius, tenetur est quo distinctio maiores. Deleniti recusandae earum ullam velit sequi cum esse doloribus dignissimos quaerat.</p>
+      </div>
+      <div class="card-footer text-muted">
+        3 ноября 2019 года
+      </div>
+    </div>
+      
+  </div>
+  <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" {% if length == 0 %}style='background:url("../static/img/pustota.svg") center no-repeat;background-size:contain'{% endif %}>
+    
+      <h1>Записи</h1>
+      {% if length != 0 %}
+      {% for note in notes %}
+      <form method="POST" id="delete_note">
+        {% csrf_token %}
+      <div class="card text-center">
+          
+          <div class="card-header" >
+            <strong>Новая запись</strong>
+            
+           <i class="far fa-window-close" id="delete_one_note" style="float:right;font-size:1.5em;cursor: pointer;"></i>
+              <input type="hidden" name="delete_note" value="{{note.id}}">
+          
+          </div>
+          <div class="card-body">
+            <h5 class="card-title text-left">{{note.author.first_name}}</h5>
+            <p class="card-text text-left">{{note.text}}</p>
+          </div>
+          <div class="card-footer text-muted">
+            {{note.date.day}}.{{note.date.month}}.{{note.date.year}}  {{note.date.hour}}:{{note.date.minute}}
+          </div>
+  </div>
+  </form>
+  {% endfor %}
+  {% endif %}
+  
+</div>
+
+  <script type="text/javascript">
+    if(document.querySelector('#delete_one_note') != null){
+
+    const form = document.getElementById('delete_note'),
+          icon = document.querySelector('#delete_one_note');
+    
+    icon.addEventListener('click',() => {
+      const userAnsw = confirm('Вы правда хотите удалить?')
+      if (userAnsw)
+        form.submit()
+    })
+    }
+  </script>
 
   {%endblock%}
